@@ -1,0 +1,42 @@
+PUT _template/dbsecurity_template
+{
+  "index_patterns": [
+    "dbsecurity-*"
+  ],
+  "order": 0,
+  "settings": {
+    "number_of_shards": 2,
+    "number_of_replicas": 1,
+    "max_result_window": 10000,
+    "refresh_interval": "30s"
+  },
+  "aliases": {
+    "alias_1": {}
+  },
+  "mappings": {
+    "_source": {
+      "enabled": false
+    },
+    "properties": {
+      "timestamp": {
+        "type": "date"
+      },
+      "dptsrc": {
+        "type": "ip"
+      },
+      "suggest": {
+        "type": "completion"
+      }
+    },
+    "dynamic_templates": [
+      {
+        "rest_fields": {
+          "match": "*",
+          "mapping": {
+            "type": "keyword"
+          }
+        }
+      }
+    ]
+  }
+}

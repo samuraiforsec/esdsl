@@ -3,27 +3,32 @@ PUT _template/test_template
 
 
 
-	"index_patterns":["test_index_*","test_*"],
-
-	"settings":{
-
-		"number_of_shards":5,
+	"index_patterns":["dbsecurity-*"],
+    "order": 0,                // 模板的权重, 多个模板的时候优先匹配用, 值越大, 权重越高
+    "settings": {
+		"number_of_shards":2,
 
 		"number_of_replicas":1,
 
 		"max_result_window":10000,
 
-		"refresh_interval":"30s"
+		"refresh_interval":"30s"// 分片数量, 可以定义其他配置项
+    },
+    "aliases": {
+        "alias_1": {}          // 索引对应的别名
+    },
 
-	},
+
 
 	"mappings":{
 
 		"_doc":{ 
 
+"_source":{"enabled":false},
+
 			"properties":{
 
-				"id":{"type":"long"},
+				"timestamp":{"type":"date"},
 
 				"title":{"type":"keyword"},
 
