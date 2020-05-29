@@ -3,9 +3,9 @@ PUT _template/dbsecurity_template
   "index_patterns": [
     "dbsecurity-*"
   ],
-  "order": 0,
+  "order": 1,
   "settings": {
-    "number_of_shards": 2,
+    "number_of_shards": 1,
     "number_of_replicas": 1,
     "max_result_window": 10000,
     "refresh_interval": "30s"
@@ -15,17 +15,30 @@ PUT _template/dbsecurity_template
   },
   "mappings": {
     "_source": {
-      "enabled": false
+      "enabled": true
     },
     "properties": {
-      "timestamp": {
-        "type": "date"
+      "eventime": {
+        "type": "date",
+        "format": "yyyy-MM-dd HH:mm:ss.S||yyyy-MM-dd||epoch_millis"
       },
-      "dptsrc": {
-        "type": "ip"
+      "dst": {
+        "type": "ip",
+         "fields": {
+              "raw": {
+                "type":  "keyword",
+                "ignore_above": 256
+              }
+            }
       },
-      "suggest": {
-        "type": "completion"
+      "src": {
+        "type": "ip",
+        "fields": {
+              "raw": {
+                "type":  "keyword",
+                "ignore_above": 256
+              }
+            }
       }
     },
     "dynamic_templates": [
@@ -40,3 +53,6 @@ PUT _template/dbsecurity_template
     ]
   }
 }
+
+PUT dbsecurity-2020-05-25/_doc/11
+{ "dst":"168.9.2.44","dpt":"1523","duser":"imcc2", "src":"168.11.70.201","spt":"24720","proto":"TCP","eventime": "2020-05-24 13:22:46.0","policy":"查询敏感数据返回超过50行","servergroup":"Oracle","servicename":"Oracle","applicationname":"Default Oracle Application","descriptionc":"Distributed 查询敏感数据返回超过50行","alertid":"28625","eventdescription":"查询敏感数据返回超过50行","violationsvalue":"Custom Rule Violation: 查询敏感数据返回超过50行,-1459609669241747601.","rawqueryvalue":"select t1.PARENT_RCID, t1.rc_state,  t1.max_load, t1.cur_load, t1.reg_date,.t2.ID,t2.USER_TYPE,t2.LOGON_NUMBER,t2.PASSWORD,t2.NAME,t2.RESIDE_DISTRICT,t2.LOGON_DISTRICT,t2.SEX,t2.AGE,t2.STATE,t2.TEL,t2.ON_LINE,t2.LAST_TIME,t2.CREATE_MAN,.t2.CREATE_TIME,t2.UPDATE_MAN,t2.UPDATE_TIME,t2.ORGAN_ID,t2.HOST_TEL,t2.DEFAULT_CONNECT_COUNT,t2.DEFAULT_EXCE_CONNECT_COUNT,t2.ORGAN_CENTER_ID,t2.CRM_ACCT,t2.CRM_NAME,.t2.PASSWD_TIME, t2.SERV_QQUSER,t2.LOGO_URL from IM_SM_RESOURCE_LIST t1 left join IM_SM_USER t2 on t1.server_no=t2.id where t1.reg_flag= 'REG' and t1.server_type=4.and t2.STATE='SOA' and (( t1.REG_DATE +  interval '21600'  second ) > :f1            )","affectedrows":"0","dbresponse":"true","stringmessage":"${Event.struct.complete.errorValue}","responsesize":"88","violateditem":"Custom Violation"}
