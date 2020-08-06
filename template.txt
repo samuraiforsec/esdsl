@@ -4,7 +4,7 @@ PUT _template/test_template
 
 
 	"index_patterns":["dbsecurity-*"],
-    "order": 0,                // 模板的权重,m 多个模板的时候优先匹配用, 值越大, 权重越高
+    "order": 0,                // 模板的权重11111111111,多个模板的时候优先匹配用, 值越大, 权重越高
     "settings": {
 		"number_of_shards":2,
 
